@@ -78,11 +78,7 @@ public class ProductServlet extends HttpServlet {
 
         try {
             Connection con = DriverManager.getConnection(url, dbUsername, dbPassword);
-
-            // 3. Create a statement
             Statement st = con.createStatement();
-
-            // 4. Create a ResultSet
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
@@ -92,7 +88,6 @@ public class ProductServlet extends HttpServlet {
             System.out.println("CURRENT SHOE");
             System.out.println(shoe);
 
-            // 5. Close all connections
             rs.close();
             st.close();
             con.close();
@@ -110,18 +105,13 @@ public class ProductServlet extends HttpServlet {
 
         try {
             Connection con = DriverManager.getConnection(url, dbUsername, dbPassword);
-
-            // 3. Create a statement
             Statement st = con.createStatement();
-
-            // 4. Create a ResultSet
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 deets.add(rs.getString("details"));
             }
 
-            // 5. Close all connections
             rs.close();
             st.close();
             con.close();
@@ -291,8 +281,5 @@ public class ProductServlet extends HttpServlet {
             writer.println("</body>");
             writer.println("</html>");
         }
-    }
-    private String dualGradient(String gradient1, String gradient2) {
-        return "-webkit-linear-gradient(-235deg, "+gradient1 +" 50%, "+gradient2 +" 50%)";
     }
 }
