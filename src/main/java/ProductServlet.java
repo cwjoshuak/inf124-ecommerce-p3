@@ -41,8 +41,10 @@ public class ProductServlet extends HttpServlet {
 
 			cart.add(i);
 			session.setAttribute("cart", cart);
-			response.sendRedirect("./checkout");
+
 		}
+		response.sendRedirect("./checkout");
+		return;
 
     }
 
