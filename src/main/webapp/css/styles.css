@@ -535,3 +535,66 @@ form button {
   padding: 10px;
   background-color: white;
 }
+
+
+.cart {
+  background-color: #FF971A;
+  border: none;
+  color: black;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.checkout {
+  background-color: rgb(255, 199, 94);
+}
+
+.cartitem h4{
+  margin-top: 0px;
+  margin-bottom: 2px;
+  font-size: 2em;
+  font-weight:bold;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+}
+
+.cartitem h5{
+  margin-top: 0px;
+  margin-bottom: 2px;
+  font-size: 1.6em;
+  font-weight:bold;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  font-width: normal;
+  text-decoration: none;
+}
+
+.cartrows {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.cartitem .cartleft {
+  max-width: 270px;
+}
+
+.cartitem .cartright {
+  max-width: 310px;
+}
+
+.cartitem img.cartpic {
+  width: 200px;
+  height: 167px;
+  margin: 20px;
+  box-shadow: 5px 7px 7px 5px rgba(0, 0, 0, 0.2),
+  1px 4px 4px 1px rgba(0, 0, 0, 0.19);
+  padding: 10px;
+  background-color: white;
+  transition: transform 0.3s;
+}

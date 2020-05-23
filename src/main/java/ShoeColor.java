@@ -23,5 +23,12 @@ public class ShoeColor {
 
 		}
 	}
+	@Override
+	public String toString() {
+		return "ShoeColor{" +
+				"color_name=" + colorName + '\'' +
+				", file_name='" + fileName + '\'' +
+				'}';
+	}
 
 }
