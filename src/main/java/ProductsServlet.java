@@ -123,7 +123,7 @@ public class ProductsServlet extends HttpServlet {
 
 
 			writer.println("<body class=\"products\" style=\"margin: 0;\">");
-			writer.println("<div><div class=\"logo\"><a href=\"../\">ecrocs</a></div></div>");
+			writer.println("<div><div class=\"logo\"><a href=\"../inf124-ecommerce-p3\">ecrocs</a></div></div>");
 
 			Map<String, ArrayList<Shoe>> shoes = getProducts();
 			Iterator<String> ite = shoes.keySet().iterator();
