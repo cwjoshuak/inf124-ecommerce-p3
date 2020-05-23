@@ -16,7 +16,7 @@ import java.net.*;
 public class ProductServlet extends HttpServlet {
     private String url = "jdbc:mysql://localhost:3306/ecrocs?serverTimezone=UTC";
     private String dbUsername = "root";
-    private String dbPassword = "rxpost123";
+    private String dbPassword = "";
     public void init() {
         // 1. Load JDBC driver
         try {
@@ -43,9 +43,13 @@ public class ProductServlet extends HttpServlet {
 			session.setAttribute("cart", cart);
 
 		}
+
 		response.sendRedirect("./checkout");
 		return;
+    }
 
+    protected void toCart(HttpServletResponse response) throws IOException {
+        response.sendRedirect("./checkout");
     }
 
     public static String getCurrentID(HttpServletRequest request){
@@ -232,7 +236,8 @@ public class ProductServlet extends HttpServlet {
 
 
             writer.println("<body style=\"margin: 0;\">");
-            writer.println("<div class=\"productheader\"><div class=\"logo\"><a href=\"./products\">ecrocs</a></div></div>");
+            writer.println("<div class=\"productheader\"><div class=\"logo\"><a href=\"./products\">ecrocs</a></div>" +
+                    "<div><a class='cartt' href=\"./checkout\">My Cart</a></div></div>");
 
             Shoe currShoe = getShoe(getCurrentID(request));
             String currColor = getCurrentColor(request);
