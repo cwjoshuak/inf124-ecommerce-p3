@@ -109,7 +109,7 @@ public class Checkout extends HttpServlet {
 					totalPrice += (cart.get(i).shoe.price * cart.get(i).quantity);
 				}
 
-				writer.println("<div><h5>Total Price: $" + totalPrice +"</h5></div>");
+				writer.println("<div><h5>Total Price: $" +  Math.round(totalPrice * 100.0) / 100.0+"</h5></div>");
 			}
 
 
