@@ -208,6 +208,28 @@ th {
 .products .logo a:link {
   color: white;
 }
+.products .recent {
+	background-color: white;
+	padding: 10px;
+}
+.products .recent-card {
+	margin: 10px;
+	width: 200px;
+	height: 172px;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 1px 2px 3px 1px rgba(0, 0, 0, 0.2),
+	1px 4px 4px 1px rgba(0, 0, 0, 0.19);
+
+}
+.recent a {
+	text-decoration: none;
+}
+.recent-card img {
+	width: 160px;
+	height: 134px;
+	padding: 20px;
+}
 
 .productheader {
   background-color: rgb(186, 120, 248);
@@ -356,7 +378,7 @@ th {
   border: solid blue;
 }
 
-/* Below code was adapted from MDN's Your First Form 
+/* Below code was adapted from MDN's Your First Form
 https://developer.mozilla.org/en-US/docs/Learn/Forms/Your_first_form
 */
 .order-form {

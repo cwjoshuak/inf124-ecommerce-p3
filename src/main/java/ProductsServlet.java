@@ -1,8 +1,10 @@
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,7 +15,7 @@ import java.util.*;
 public class ProductsServlet extends HttpServlet {
 	private String url = "jdbc:mysql://localhost:3306/ecrocs?serverTimezone=UTC";
 	private String dbUsername = "root";
-	private String dbPassword = "";
+	private String dbPassword = "rxpost123";
 	public void init() {
 		// 1. Load JDBC driver
 		try {
@@ -98,9 +100,17 @@ public class ProductsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession();
+		if (session.getAttribute("viewed") == null) {
 
+			ArrayList<String> test = new ArrayList<>();
+			session.setAttribute("viewed", test);
+		}
 
 		try (PrintWriter writer = response.getWriter()) {
+
+
+
 			writer.println("<!DOCTYPE html><html lang='en'>");
 			writer.println("<head>");
 			writer.println("<title>eCrocs | Products</title>");
@@ -120,42 +130,44 @@ public class ProductsServlet extends HttpServlet {
 			while(ite.hasNext()) {
 				String shoeType = ite.next();
 				writer.println("<table><thead><tr>");
-				writer.println("<th colspan=3>Men's "+shoeType +"</th>");
+				writer.println("<th colspan=3>Men's " + shoeType + "</th>");
 				writer.println("</tr></thead><tbody><tr>");
 				ArrayList<Shoe> shoeList = shoes.get(shoeType);
-				for(int i = 0; i < shoeList.size(); i++){
+				for (int i = 0; i < shoeList.size(); i++) {
 					Shoe shoe = shoeList.get(i);
 					Map<String, ShoeColor> colors = processShoe(shoe);
 					writer.println("<td>");
-					String colorsDiv = "<div class=\"colors\" id=\"colors-"+shoe.id+"\">";
+					String colorsDiv = "<div class=\"colors\" id=\"colors-" + shoe.id + "\">";
 
 					Iterator<String> colorsIte = colors.keySet().iterator();
 					while (colorsIte.hasNext()) {
 						String colorDivStyle = "";
 						ShoeColor sc = colors.get(colorsIte.next());
 						if (sc.colorHex.size() == 2) {
-							colorDivStyle = "\"background-image: "+dualGradient(sc.colorHex.get(0), sc.colorHex.get(1))+";\"";
+							colorDivStyle = "\"background-image: " + dualGradient(sc.colorHex.get(0), sc.colorHex.get(1)) + ";\"";
 						} else {
-							colorDivStyle = "\"background-color: "+sc.colorHex.get(0)+";\"";
+							colorDivStyle = "\"background-color: " + sc.colorHex.get(0) + ";\"";
 						}
-						colorsDiv += "<div class=\"circle\" name=\""+sc.colorName+"\" style="+colorDivStyle+"></div>";
+						colorsDiv += "<div class=\"circle\" name=\"" + sc.colorName + "\" style=" + colorDivStyle + "></div>";
 					}
-						colorsDiv += "</div>";
-						String title = "<div class=\"title\">"+shoe.name+"</div>";
+					colorsDiv += "</div>";
+					String title = "<div class=\"title\">" + shoe.name + "</div>";
 
-						String img = "<img src=\"./assets/"+shoe.id+"/product_0.jpg\" id=\"img-"+shoe.id+"\">";
-						String price = "<span class=\"price\">$"+shoe.price+"</span>";
+					String img = "<img src=\"./assets/" + shoe.id + "/product_0.jpg\" id=\"img-" + shoe.id + "\">";
+					String price = "<span class=\"price\">$" + shoe.price + "</span>";
 
-						String card = "<div class=\"card\">"+title +img +price +colorsDiv +"</div>";
-						String anchor = "<a id=\"a-"+shoe.id+"\" href\"\">"+card+"</a>";
+					String card = "<div class=\"card\">" + title + img + price + colorsDiv + "</div>";
+					String anchor = "<a id=\"a-" + shoe.id + "\" href=\"\">" + card + "</a>";
 
-						writer.println(anchor);
-						writer.println("</td>");
+					writer.println(anchor);
+					writer.println("</td>");
 
 				}
 				writer.println("</tr></tbody></table>");
 			}
-			writer.println("<script src=\"./js/new-products.js\"></script>");
+
+			RequestDispatcher rd = request.getRequestDispatcher("/api/recentlyviewed");
+			rd.include(request, response);
 			writer.println("</body>");
 			writer.println("</html>");
 		}

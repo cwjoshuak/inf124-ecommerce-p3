@@ -1,3 +1,12 @@
+let recentTable = document.getElementById("recent");
+console.log(recentTable);
+if (recentTable !== null) {
+
+	let tableParent = recentTable.parentElement;
+	tableParent.insertBefore(recentTable, tableParent.firstChild.nextSibling.nextSibling);
+
+}
+
 let cards = document.getElementsByClassName("card");
 for (let i = 0; i < cards.length; i++) {
   cards[i].addEventListener("mouseenter", (event) => {
@@ -18,17 +27,17 @@ for (let i = 0; i < colors.length; i++) {
   for (let j = 0; j < colorCircles.length; j++) {
     if (j == 0) {
       let name = colorCircles[j].attributes["name"].value;
-      anchor.setAttribute("href", "./product.php?id=" + id + "&color=" + name);
+      anchor.setAttribute("href", "./product?id=" + id + "&color=" + name);
     }
 
     colorCircles[j].addEventListener("mouseenter", (event) => {
       i = document.getElementById("img-" + id);
 
       i.setAttribute("src", "./assets/" + id + "/product_" + j + ".jpg");
-      a = document.getElementById("a-" + id);
+      var a = document.getElementById("a-" + id);
       a.setAttribute(
         "href",
-        "./product.php?id=" +
+        "./product?id=" +
           id +
           "&color=" +
           event.target.attributes.name.value
