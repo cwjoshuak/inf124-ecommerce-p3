@@ -3,6 +3,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.util.*;
 public class Checkout extends HttpServlet {
     private String url = "jdbc:mysql://localhost:3306/ecrocs?serverTimezone=UTC";
     private String dbUsername = "root";
-    private String dbPassword = "";
+    private String dbPassword = "rxpost123";
     public void init() {
         // 1. Load JDBC driver
         try {
@@ -57,9 +58,9 @@ public class Checkout extends HttpServlet {
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
 
-        ArrayList<Item> cart = new ArrayList<Item>();
-        cart.add(new Item(getShoe("10001"), "Pool Blue", "3", 7,1));
-        cart.add(new Item(getShoe("205392"), "Black / White ", "2", 8,2));
+//        ArrayList<Item> cart = new ArrayList<Item>();
+//        cart.add(new Item(getShoe("10001"), "Pool Blue", "3", 7,1));
+//        cart.add(new Item(getShoe("205392"), "Black / White ", "2", 8,2));
 
         try (PrintWriter writer = response.getWriter()) {
             writer.println("<!DOCTYPE html><html lang='en'>");
@@ -74,36 +75,46 @@ public class Checkout extends HttpServlet {
 
 
             writer.println("<body class=\"checkout\" style=\"margin: 0;\">");
-            writer.println("<div class='confirmationheader'><div class=\"logo\"><a href=\"../\">ecrocs</a></div></div>");
+            writer.println("<div class='confirmationheader'><div class=\"logo\"><a href=\"../inf124-ecommerce-p3/products\">ecrocs</a></div></div>");
 
             writer.println("<div class='confirmation'>");
             writer.println("<div class='confirmation-left'>");
             writer.println("<h3>Your Cart</h3>");
 
-            double totalPrice = 0;
-            double tax = 0;
+			HttpSession session = request.getSession(false);
+			if(session != null) {
+				ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart");
+				if (cart == null) {
+					session.setAttribute("cart", new ArrayList<Item>());
+					cart = (ArrayList<Item>) session.getAttribute("cart");
+				}
+				double totalPrice = 0;
+				double tax = 0;
 
-            for (int i = 0;i<cart.size();i++) {
-                writer.println("<div class='cartitem'>");
-                writer.println("<h4>"+ cart.get(i).shoe.name +"</h4>");
-                writer.println("<div class='cartrows'>");
-                writer.println("<div class='cartleft'>");
-                writer.println("<img src=\"./assets/"+ cart.get(i).shoe.id+"/product_"+cart.get(i).colorIndex+".jpg\" class='cartpic' />");
-                writer.println("</div>");
-                writer.println("<div class='cartright'>");
-                writer.println("<br />");
-                writer.println("<div><h5>Price: $" + cart.get(i).shoe.price +"</h5></div>");
-                writer.println("<div><h5>Size:  " + cart.get(i).size +"</h5></div>");
-                writer.println("<div><h5>Quantity: " + cart.get(i).quantity +"</h5></div>");
-                writer.println("</div>");
-                writer.println("</div>");
-                writer.println("</div>");
-                totalPrice += (cart.get(i).shoe.price * cart.get(i).quantity);
-            }
+				for (int i = 0;i<cart.size();i++) {
+					writer.println("<div class='cartitem'>");
+					writer.println("<h4>"+ cart.get(i).shoe.name +"</h4>");
+					writer.println("<div class='cartrows'>");
+					writer.println("<div class='cartleft'>");
+					writer.println("<img src=\"./assets/"+ cart.get(i).shoe.id+"/product_"+cart.get(i).colorIndex+".jpg\" class='cartpic' />");
+					writer.println("</div>");
+					writer.println("<div class='cartright'>");
+					writer.println("<br />");
+					writer.println("<div><h5>Price: $" + cart.get(i).shoe.price +"</h5></div>");
+					writer.println("<div><h5>Size:  " + cart.get(i).size +"</h5></div>");
+					writer.println("<div><h5>Quantity: " + cart.get(i).quantity +"</h5></div>");
+					writer.println("</div>");
+					writer.println("</div>");
+					writer.println("</div>");
+					totalPrice += (cart.get(i).shoe.price * cart.get(i).quantity);
+				}
+
+				writer.println("<div><h5>Total Price: $" + totalPrice +"</h5></div>");
+			}
 
 
 
-            writer.println("<div><h5>Total Price: $" + totalPrice +"</h5></div>");
+
 //            writer.println("<div><h5>Tax: $" + tax +"</h5></div>");
 //            writer.println("<div><h5>Total Price w/ Tax: $" + (totalPrice + tax) +"</h5></div>");
 

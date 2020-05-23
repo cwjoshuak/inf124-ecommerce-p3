@@ -7,8 +7,10 @@ document.title =
     document.getElementsByClassName("product-right")[0].children[0].textContent;
 orderForm.appendChild(oih3);
 let form = document.createElement("form");
-form.action = "javascript:;";
-form.onsubmit = (ev) => insertToDB(ev);
+form.action = "./product";
+form.method = "POST"
+form.id = "orderForm"
+// form.onsubmit = (ev) => insertToDB(ev);
 
 form.innerHTML = `<ul>
   <li>
@@ -17,7 +19,7 @@ form.innerHTML = `<ul>
   </li>
   <br /> <br />
     <button class= "cart" type="submit">Add To Cart</button>
-    
+
 </ul>`;
 orderForm.appendChild(form);
 

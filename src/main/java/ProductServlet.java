@@ -1,3 +1,4 @@
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +16,7 @@ import java.net.*;
 public class ProductServlet extends HttpServlet {
     private String url = "jdbc:mysql://localhost:3306/ecrocs?serverTimezone=UTC";
     private String dbUsername = "root";
-    private String dbPassword = "";
+    private String dbPassword = "rxpost123";
     public void init() {
         // 1. Load JDBC driver
         try {
@@ -25,6 +26,23 @@ public class ProductServlet extends HttpServlet {
         }
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		if(session != null){
+			ArrayList<Item> cart = (ArrayList<Item>)session.getAttribute("cart");
+			if (cart == null) {
+				session.setAttribute("cart", new ArrayList<Item>());
+				cart = (ArrayList<Item>)session.getAttribute("cart");
+			}
+			String qty = request.getParameter("qty");
+			String size = request.getParameter("size");
+			String id = request.getParameter("sid");
+			String color = request.getParameter("color");
+			Item i = new Item(getShoe(id), request.getParameter("color"), getShoeColor(id,color), Integer.parseInt(size), Integer.parseInt(qty));
+
+			cart.add(i);
+			session.setAttribute("cart", cart);
+			response.sendRedirect("./checkout");
+		}
 
     }
 
@@ -36,12 +54,9 @@ public class ProductServlet extends HttpServlet {
         return request.getParameter("color");
     }
 
-    protected String getShoeColor(HttpServletRequest request){
-        String queryID = getCurrentID(request);
-        String queryColor = getCurrentColor(request);
 
-
-        String query = "SELECT * FROM `shoe_colors` WHERE shoe_id=" + queryID + " AND color_name=\"" + queryColor +"\"";
+    protected String getShoeColor(String id, String color){
+        String query = "SELECT * FROM `shoe_colors` WHERE shoe_id=" + id + " AND color_name=\"" + color +"\"";
 
         String fileName = "";
         try {
@@ -183,16 +198,24 @@ public class ProductServlet extends HttpServlet {
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
 
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            ArrayList<String> viewed = (ArrayList<String>)session.getAttribute(("viewed"));
-            String id = request.getParameter("id");
-            viewed.add(0, id);
-            if (viewed.size() > 5) {
-                viewed.remove(5);
-            }
-            session.setAttribute("viewed", viewed);
-        }
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			ArrayList<String[]> viewed = (ArrayList<String[]>)session.getAttribute(("viewed"));
+			String id = request.getParameter("id");
+			String color = request.getParameter("color");
+			for(int i = 0; i < viewed.size(); i++){
+				String[] arr = viewed.get(i);
+				if (arr[0].equals(id) && arr[1].equals(color)) {
+					viewed.remove(i);
+				}
+			}
+			viewed.add(0, new String[]{id, color});
+
+			if (viewed.size() > 5) {
+				viewed.remove(5);
+			}
+			session.setAttribute("viewed", viewed);
+		}
 
         try (PrintWriter writer = response.getWriter()) {
             writer.println("<!DOCTYPE html><html lang='en'>");
@@ -214,7 +237,9 @@ public class ProductServlet extends HttpServlet {
             ArrayList<String> deets = getShoeDetails(currShoe);
             ArrayList<String> sizes = getShoeSizes(currShoe);
             ArrayList<ShoeColor> colors = getShoeColors(currShoe);
-            String currColorIndex = getShoeColor(request);
+            String queryID = getCurrentID(request);
+			String queryColor = getCurrentColor(request);
+            String currColorIndex = getShoeColor(queryID, queryColor);
 
             writer.println("<div class=\"product\">");
             writer.println("<div class=\"product-left\">");
@@ -246,28 +271,29 @@ public class ProductServlet extends HttpServlet {
 
             for (int i =0; i < colors.size();i++) {
                 if (currColor.equals(colors.get(i).colorName)) {
-                    writer.println("<a href='./product.php?id="+currShoe.id+"&color="+colors.get(i).colorName+"'><img src='./assets/"+currShoe.id+"/color_"+colors.get(i).fileName.substring(colors.get(i).fileName.length() -1)+".jpg' class='small active'></a>");
+                    writer.println("<a href='./product?id="+currShoe.id+"&color="+colors.get(i).colorName+"'><img src='./assets/"+currShoe.id+"/color_"+colors.get(i).fileName.substring(colors.get(i).fileName.length() -1)+".jpg' class='small active'></a>");
                 } else {
-                    writer.println("<a href='./product.php?id="+currShoe.id+"&color="+colors.get(i).colorName+"'><img src='./assets/"+currShoe.id+"/color_"+colors.get(i).fileName.substring(colors.get(i).fileName.length() -1)+".jpg' class='small'></a>");
+                    writer.println("<a href='./product?id="+currShoe.id+"&color="+colors.get(i).colorName+"'><img src='./assets/"+currShoe.id+"/color_"+colors.get(i).fileName.substring(colors.get(i).fileName.length() -1)+".jpg' class='small'></a>");
                 }
             }
 
             writer.println("</div>");
             writer.println("<br />");
-            writer.println("<span class='size-text bold'>Shoe Size:</span>");
-            writer.println("<select id='size-selector'>");
+			writer.println("<span class='size-text bold'>Shoe Size:</span>");
+			writer.println("<select name='size' id='size-selector' form='orderForm'>");
 
-            for (int i =0; i <sizes.size();i++) {
-                writer.println("<option value='"+sizes.get(i)+"'>"+sizes.get(i)+"</option>");
-            }
+			for (int i =0; i <sizes.size();i++) {
+				writer.println("<option value='"+sizes.get(i)+"'>"+sizes.get(i)+"</option>");
+			}
 
-            writer.println("</select>");
-
+			writer.println("</select>");
             writer.println("<br />");
 
             writer.println("<div class='order-form' id='odForm'>");
+			writer.println(" <input type=\"hidden\" name=\"sid\" form='orderForm' value=\""+request.getParameter("id")+"\">");
+			writer.println(" <input type=\"hidden\" name=\"color\" form='orderForm' value=\""+request.getParameter("color")+"\">");
 
-            writer.println("</div>");
+			writer.println("</div>");
             writer.println("</div>");
             writer.println("</div>");
 
