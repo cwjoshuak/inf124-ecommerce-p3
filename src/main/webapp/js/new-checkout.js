@@ -149,29 +149,41 @@ function getPlace(zip) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             // Data should look like "Fairfax, Virginia"
             var result = xhr.responseText;
-            var place = result.split(", ");
+            console.log(result);
+            var place = result.split(",");
+            console.log(place);
+            console.log(place[0]);
+            console.log(place[1]);
+            console.log(place[2]);
+            console.log(place[3]);
+
             document.getElementById("city").value = place[0];
             document.getElementById("state").value = place[1];
-            if (place[3]) {
+            if (place[2]) {
                 var basePrice = document
-                    .getElementById("baseprice")
-                    .textContent.substring(1);
-                var taxPrice = basePrice * parseFloat(place[2]);
+                    .getElementById("baseprice").textContent;
+                console.log(basePrice);
+                console.log(place[2]);
+                var taxPrice = parseFloat(basePrice) * parseFloat(place[2]);
+
+
                 var taxPer = parseFloat(place[2]) * 100;
+                var totalPrice = parseFloat(basePrice) + taxPrice;
+                console.log(totalPrice);
                 document.getElementById("tax").textContent = +taxPrice.toFixed(2);
                 document.getElementById("taxfrom").textContent = place[3];
-                document.getElementById("taxpercentage").textContent = taxPer.toFixed(
-                    0
-                );
+                document.getElementById("taxpercentage").textContent = taxPer.toFixed(0);
+                document.getElementById("totalprice").textContent = totalPrice.toFixed(2);
+
             } else {
-                document.getElementById("tax").textContent = "0.00";
+                document.getElementById("tax").textContent = 0.00;
                 document.getElementById("taxfrom").textContent = "";
                 document.getElementById("taxpercentage").textContent = 0;
             }
         }
     };
     // Call the response software component
-    xhr.open("GET", "api/getCityState.php?zip=" + zip);
+    xhr.open("GET", "./api/getCityState?zip=" + zip);
     xhr.send(null);
 }
 

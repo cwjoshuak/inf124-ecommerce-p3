@@ -109,13 +109,16 @@ public class Checkout extends HttpServlet {
 					totalPrice += (cart.get(i).shoe.price * cart.get(i).quantity);
 				}
 
-				writer.println("<div><h5>Total Price: $" +  Math.round(totalPrice * 100.0) / 100.0+"</h5></div>");
-			}
+				writer.println("<div><h5>Price: $<span id='baseprice'>" +  Math.round(totalPrice * 100.0) / 100.0+"</span></h5></div>");
+                writer.println("<h5>+ $<span id='tax'>0.00</span> <span id='taxfrom'></span> tax (<span id='taxpercentage'>0</span>%)</h5>");
+                writer.println("<div><h5>Total Price: $<span id='totalprice'>" +  Math.round(totalPrice * 100.0) / 100.0+"</span></h5></div>");
+
+            }
 
 
 
 
-//            writer.println("<div><h5>Tax: $" + tax +"</h5></div>");
+
 //            writer.println("<div><h5>Total Price w/ Tax: $" + (totalPrice + tax) +"</h5></div>");
 
 

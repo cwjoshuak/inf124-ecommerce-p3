@@ -10,7 +10,6 @@ let form = document.createElement("form");
 form.action = "./product";
 form.method = "POST"
 form.id = "orderForm"
-// form.onsubmit = (ev) => insertToDB(ev);
 
 form.innerHTML = `<ul>
   <li>
@@ -23,30 +22,3 @@ form.innerHTML = `<ul>
 </ul>`;
 orderForm.appendChild(form);
 
-function parseQuery(queryString) {
-    var query = {};
-    var pairs = (queryString[0] === "?"
-            ? queryString.substr(1)
-            : queryString
-    ).split("&");
-    for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i].split("=");
-        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
-    }
-    return query;
-}
-let queryParams = parseQuery(window.location.search);
-
-function insertToDB(ev) {
-    let form = Object.entries(ev.target);
-    console.log(form);
-    console.log(
-        JSON.stringify({
-            shoe_id: queryParams["id"],
-            color: queryParams["color"],
-            shoe_size: document.getElementById("size-selector").value,
-            quantity: form[0][1].value,
-            base_price: document.getElementById("baseprice").textContent.substring(1)
-        })
-    );
-}
