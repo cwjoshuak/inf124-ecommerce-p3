@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.19, for osx10.15 (x86_64)
 --
 -- Host: localhost    Database: ecrocs
 -- ------------------------------------------------------
--- Server version	5.7.29-0ubuntu0.18.04.1
+-- Server version	8.0.19
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `shoe_colors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shoe_colors` (
   `shoe_id` varchar(10) NOT NULL,
   `color_name` varchar(50) NOT NULL,
@@ -47,9 +47,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `shoe_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shoe_details` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `shoe_id` varchar(10) NOT NULL,
   `details` varchar(100) NOT NULL,
   PRIMARY KEY (`id`,`shoe_id`,`details`)
@@ -72,10 +72,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `shoe_sizes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shoe_sizes` (
   `shoe_id` varchar(10) NOT NULL,
-  `size` int(11) NOT NULL,
+  `size` int NOT NULL,
   PRIMARY KEY (`shoe_id`,`size`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -96,7 +96,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `shoes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shoes` (
   `type` varchar(10) NOT NULL,
   `id` varchar(10) NOT NULL,
@@ -124,10 +124,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tax_rates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tax_rates` (
   `State` varchar(2) NOT NULL,
-  `ZipCode` int(11) NOT NULL,
+  `ZipCode` int NOT NULL,
   `TaxRegionName` varchar(89) NOT NULL,
   `CombinedRate` decimal(8,6) NOT NULL,
   PRIMARY KEY (`ZipCode`)
@@ -146,20 +146,42 @@ INSERT INTO `tax_rates` VALUES ('IL',62622,'CASS COUNTY',0.082500),('IL',62624,'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `transaction_details`
+--
+
+DROP TABLE IF EXISTS `transaction_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `transaction_details` (
+  `transaction_id` int NOT NULL,
+  `shoe_id` varchar(10) NOT NULL,
+  `color_name` varchar(50) NOT NULL,
+  `quantity` int NOT NULL,
+  `shoe_size` int NOT NULL,
+  `base_price` double(4,2) DEFAULT NULL,
+  `state_tax` double(4,2) DEFAULT NULL,
+  PRIMARY KEY (`transaction_id`,`shoe_id`,`color_name`,`quantity`,`shoe_size`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction_details`
+--
+
+LOCK TABLES `transaction_details` WRITE;
+/*!40000 ALTER TABLE `transaction_details` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transaction_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `transactions`
 --
 
 DROP TABLE IF EXISTS `transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transactions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `shoe_id` varchar(10) DEFAULT NULL,
-  `color_name` varchar(50) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
-  `shoe_size` int(11) DEFAULT NULL,
-  `base_price` double(4,2) DEFAULT NULL,
-  `state_tax` double(4,2) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `billing_full_name` varchar(128) DEFAULT NULL,
   `billing_phone_number` varchar(12) DEFAULT NULL,
   `billing_email` varchar(128) DEFAULT NULL,
@@ -182,7 +204,7 @@ CREATE TABLE `transactions` (
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` VALUES (1,'10001','Pool Blue',3,11,44.95,4.05,'Garry Fanata','6692221234','garry@gmail.com','800 Veneto','Irvine','CA','92614','Overnight','Garry Fanata','1234123412341234','12','2021');
+INSERT INTO `transactions` VALUES (1,'Garry Fanata','6692221234','garry@gmail.com','800 Veneto','Irvine','CA','92614','Overnight','Garry Fanata','1234123412341234','12','2021');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,9 +214,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `zip_codes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `zip_codes` (
-  `zip` int(11) NOT NULL,
+  `zip` int NOT NULL,
   `state` varchar(2) NOT NULL,
   `city` varchar(16) NOT NULL,
   PRIMARY KEY (`zip`)
@@ -220,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-11 21:02:26
+-- Dump completed on 2020-05-23 17:45:36
