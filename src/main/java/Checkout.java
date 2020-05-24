@@ -1,3 +1,4 @@
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +24,94 @@ public class Checkout extends HttpServlet {
             e.printStackTrace();
         }
     }
+    protected void insertIntoDb(ArrayList<Item> items, int transactionId) {
+    	if (items != null) {
+    		String query = "INSERT INTO `transaction_details` (`transaction_id`, `shoe_id`, `color_name`, `quantity`, `shoe_size`, `base_price`, `state_tax`) VALUES (?,?,?,?,?,?,?)";
+			try {
+				Connection con = DriverManager.getConnection(url, dbUsername, dbPassword);
+
+				for(int i = 0; i < items.size(); i++){
+					PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+					st.setInt(1, transactionId);
+					st.setString(2, items.get(i).shoe.id);
+					st.setString(3, items.get(i).color);
+					st.setInt(4, items.get(i).quantity);
+					st.setInt(5, items.get(i).size);
+					st.setDouble(6, items.get(i).shoe.price);
+					st.setDouble(7, 0.0);
+					st.execute();
+					st.close();
+				}
+
+				con.close();
+			} catch (SQLException e) {
+				System.out.println(e);
+			} catch (Exception e) {
+				System.out.println(e.toString());
+			}
+		}
+	}
+
+	protected int insertTransaction(HttpServletRequest request) {
+
+		String name = request.getParameter("fname");
+		String phoneNumber = request.getParameter("phone_number");
+		String email = request.getParameter("email");
+		String address = request.getParameter("address");
+		String zip = request.getParameter("zip");
+		String shipping_method = request.getParameter("shipping");
+		String city = request.getParameter("city");
+		String state = request.getParameter("state");
+		String cardName = request.getParameter("cardname");
+		String cardNumber = request.getParameter("cardnumber");
+		String expMonth = request.getParameter("expmonth");
+		String expYear = request.getParameter("expyear");
+
+		String query = "INSERT INTO `transactions` (billing_full_name, billing_phone_number, billing_email, billing_addr_1, billing_city, billing_state, billing_zip, shipping_method, payment_name, payment_card, payment_exp_month, payment_exp_year) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+		try {
+			Connection con = DriverManager.getConnection(url, dbUsername, dbPassword);
+			PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+			st.setString(1, name);
+			st.setString(2, phoneNumber);
+			st.setString(3, email);
+			st.setString(4, address);
+			st.setString(5, city);
+			st.setString(6, state);
+			st.setString(7, zip);
+			st.setString(8, shipping_method);
+			st.setString(9, cardName);
+			st.setString(10, cardNumber);
+			st.setString(11, expMonth);
+			st.setString(12, expYear);
+
+			st.execute();
+			int autoIncKeyFromApi = -1;
+
+			ResultSet rs = st.getGeneratedKeys();
+
+			if (rs.next()) {
+				autoIncKeyFromApi = rs.getInt(1);
+			}
+			rs.close();
+			st.close();
+			con.close();
+			return autoIncKeyFromApi;
+		} catch (SQLException e) {
+			System.out.println(e);
+			return -1;
+		}
+	}
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+    	HttpSession session = request.getSession(false);
+
+    	int id = insertTransaction(request);
+		insertIntoDb((ArrayList<Item>)session.getAttribute("cart"), id);
+
+		session.setAttribute("cart", new ArrayList<Item>());
+		RequestDispatcher rd = request.getRequestDispatcher("/order_confirmation?id="+id);
+		rd.forward(request, response);
     }
 
     protected Shoe getShoe(String sid) {

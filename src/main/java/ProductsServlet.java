@@ -109,8 +109,6 @@ public class ProductsServlet extends HttpServlet {
 
 		try (PrintWriter writer = response.getWriter()) {
 
-
-
 			writer.println("<!DOCTYPE html><html lang='en'>");
 			writer.println("<head>");
 			writer.println("<title>eCrocs | Products</title>");

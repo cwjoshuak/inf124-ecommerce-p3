@@ -7,8 +7,8 @@ document.title =
     document.getElementsByClassName("confirmation-right")[0].children[0].textContent;
 orderForm.appendChild(oih3);
 let form = document.createElement("form");
-form.action = "javascript:;";
-form.onsubmit = (ev) => insertToDB(ev);
+form.action = "./checkout";
+form.method = "POST";
 
 form.innerHTML = `<ul>
   <h3>Billing Address</h3>
@@ -71,10 +71,10 @@ form.innerHTML = `<ul>
 
   <input type="text" id="state" name="state" pattern="^((AL)|(AK)|(AS)|(AZ)|(AR)|(CA)|(CO)|(CT)|(DE)|(DC)|(FM)|(FL)|(GA)|(GU)|(HI)|(ID)|(IL)|(IN)|(IA)|(KS)|(KY)|(LA)|(ME)|(MH)|(MD)|(MA)|(MI)|(MN)|(MS)|(MO)|(MT)|(NE)|(NV)|(NH)|(NJ)|(NM)|(NY)|(NC)|(ND)|(MP)|(OH)|(OK)|(OR)|(PW)|(PA)|(PR)|(RI)|(SC)|(SD)|(TN)|(TX)|(UT)|(VT)|(VI)|(VA)|(WA)|(WV)|(WI)|(WY))$" placeholder="NY" required>
   </li>
-  
+
   <li>
   <label for="shipping_method">Shipping Method:</label>
-    <select id="shipping-selector">
+    <select id="shipping-selector" name="shipping">
       <option value="Overnight">Overnight</option>
       <option value="2-days Expedited">2-days Expedited</option>
       <option value="6-days Ground">6-days Ground</option>
@@ -185,66 +185,4 @@ function getPlace(zip) {
     // Call the response software component
     xhr.open("GET", "./api/getCityState?zip=" + zip);
     xhr.send(null);
-}
-
-function insertToDB(ev) {
-    let form = Object.entries(ev.target);
-    console.log(document.getElementById("baseprice").textContent.substring(1));
-    fetch("api/order.php", {
-        method: "post",
-        body: JSON.stringify({
-            // shoe_id: queryParams["id"],
-            // color: queryParams["color"],
-            shoe_size: document.getElementById("size-selector").value,
-            quantity: form[0][1].value,
-            base_price: document.getElementById("baseprice").textContent.substring(1),
-            state_tax: document.getElementById("tax").textContent,
-            billing_full_name: form[1][1].value,
-            billing_phone_number: form[2][1].value,
-            billing_email: form[3][1].value,
-            billing_addr_1: form[4][1].value,
-            billing_city: form[6][1].value,
-            billing_state: form[7][1].value,
-            billing_zip: form[5][1].value,
-            shipping_method: form[8][1].value,
-            payment_name: form[9][1].value,
-            payment_card: form[10][1].value,
-            payment_exp_month: form[11][1].value,
-            payment_exp_year: form[12][1].value,
-        }),
-    })
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            if (!data["error"]) {
-                window.location.href =
-                    "order_confirmation.php?id=" + data["transaction_id"];
-            } else {
-                alert("There was an error confirming your order.");
-            }
-        });
-    console.log(form);
-    console.log(
-        JSON.stringify({
-            // shoe_id: queryParams["id"],
-            // color: queryParams["color"],
-            shoe_size: document.getElementById("size-selector").value,
-            quantity: form[0][1].value,
-            base_price: document.getElementById("baseprice").textContent.substring(1),
-            state_tax: document.getElementById("tax").textContent,
-            billing_full_name: form[1][1].value,
-            billing_phone_number: form[2][1].value,
-            billing_email: form[3][1].value,
-            billing_addr_1: form[4][1].value,
-            billing_city: form[6][1].value,
-            billing_state: form[7][1].value,
-            billing_zip: form[5][1].value,
-            shipping_method: form[8][1].value,
-            payment_name: form[9][1].value,
-            payment_card: form[10][1].value,
-            payment_exp_month: form[11][1].value,
-            payment_exp_year: form[12][1].value,
-        })
-    );
 }
