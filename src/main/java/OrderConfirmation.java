@@ -67,6 +67,11 @@ public class OrderConfirmation extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String transactionId = request.getParameter("id");
+		String tax = request.getParameter("taxPercent");
+
+		System.out.println("TESTES TAX");
+		System.out.println(tax);
+
 
 		try (PrintWriter writer = response.getWriter()) {
 
@@ -102,12 +107,13 @@ public class OrderConfirmation extends HttpServlet {
 				writer.println("<b>Size: </b>"+dt.shoeSize +" <b>Color:</b> "+dt.colorName+"<br/>");
 				writer.println("<b>Quantity:</b> "+dt.quantity +"<br/>");
 				writer.println("<b>Price:</b> $"+dt.basePrice +"<br/>");
-				writer.println("<b>Tax:</b> $"+dt.stateTax+"<br/><br/>");
 				double total = (dt.basePrice + dt.stateTax) * dt.quantity;
 				totalPrice += total;
-				writer.println("<b>Total Price:</b> $"+String.format("%.2f", total)+"<br/>");
 				writer.println("</h5></div>");
 			}
+//			writer.println("<h5><b>Price:</b> $"+String.format("%.2f", totalPrice)+ " + $" + Float.parseFloat(tax)/100*totalPrice + " (" + String.format("%.2f",tax) + "%) <br/>");
+//			writer.println("<b>Total Price:</b> $" +String.format("%.2f", (totalPrice + (Float.parseFloat(tax)/100*totalPrice))) + "</h5><br/>");
+
 			writer.println("</div>");
 
 			writer.println("<div class='confirmation-right'>");
@@ -117,15 +123,17 @@ public class OrderConfirmation extends HttpServlet {
 			writer.println(tr.city+"<br/>");
 			writer.println(tr.state+", "+tr.zip +"</h5><br/>");
 
-			writer.println("Total Cart Price: $" +String.format("%.2f", totalPrice));
+			writer.println("<h3>Price: $" + String.format("%.2f", totalPrice) + " + $" + String.format("%.2f", (Float.parseFloat(tax)/100*totalPrice)) + " (" + tax + "%)</h3>");
+			writer.println("<h3>Total Price: $" + String.format("%.2f", totalPrice + (Float.parseFloat(tax)/100*totalPrice)) + "</h3>");
+
 
 
 			writer.println("<div class='payment-info'>");
 			writer.println("<br/><br/><br/><h3>Payment Information</h3><h5>");
 			writer.println("<b>Name:</b> "+tr.paymentName +"<br/>");
 			writer.println("<b>Credit Card Number:</b> **** **** **** "+tr.paymentCard.substring(tr.paymentCard.length()-4)+" <br/>");
-			writer.println("<b>Credit Card Expiry:</b> "+String.format("%-2s", tr.paymentMonth).replace(' ', '0')+tr.paymentYear+"</h5>");
-			writer.println("</div></div>");
+			writer.println("<b>Credit Card Expiry:</b> "+String.format("%-2s", tr.paymentMonth).replace(' ', '0')+ "/" +tr.paymentYear+"</h5>");
+			writer.println("</div></div></div>");
 		}
 
 	}

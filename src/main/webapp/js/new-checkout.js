@@ -124,6 +124,7 @@ form.innerHTML = `<ul>
       required
     />
   </li>
+  <input type="hidden" id="taxPercent" name="taxPercent" value='99999'>
   <li class="button">
     <button type="submit">Purchase</button>
   </li>
@@ -164,21 +165,22 @@ function getPlace(zip) {
                     .getElementById("baseprice").textContent;
                 console.log(basePrice);
                 console.log(place[2]);
-                var taxPrice = parseFloat(basePrice) * parseFloat(place[2]);
-
-
                 var taxPer = parseFloat(place[2]) * 100;
+                var taxPrice = parseFloat(basePrice) * ((taxPer.toFixed(2))/100);
                 var totalPrice = parseFloat(basePrice) + taxPrice;
                 console.log(totalPrice);
                 document.getElementById("tax").textContent = +taxPrice.toFixed(2);
                 document.getElementById("taxfrom").textContent = place[3];
-                document.getElementById("taxpercentage").textContent = taxPer.toFixed(0);
+                document.getElementById("taxpercentage").textContent = taxPer.toFixed(2);
+                document.getElementById("taxPercent").value = taxPer.toFixed(2);
                 document.getElementById("totalprice").textContent = totalPrice.toFixed(2);
 
             } else {
                 document.getElementById("tax").textContent = 0.00;
                 document.getElementById("taxfrom").textContent = "";
-                document.getElementById("taxpercentage").textContent = 0;
+                document.getElementById("taxpercentage").value = 0;
+                document.getElementById("taxPercent").textContent = 0;
+
             }
         }
     };

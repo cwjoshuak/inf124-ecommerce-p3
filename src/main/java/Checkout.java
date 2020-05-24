@@ -67,6 +67,7 @@ public class Checkout extends HttpServlet {
 		String expMonth = request.getParameter("expmonth");
 		String expYear = request.getParameter("expyear");
 
+
 		String query = "INSERT INTO `transactions` (billing_full_name, billing_phone_number, billing_email, billing_addr_1, billing_city, billing_state, billing_zip, shipping_method, payment_name, payment_card, payment_exp_month, payment_exp_year) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 		try {
 			Connection con = DriverManager.getConnection(url, dbUsername, dbPassword);
@@ -128,9 +129,6 @@ public class Checkout extends HttpServlet {
                 shoe = new Shoe(rs, new String[]{"type", "name", "id", "price", "desc1", "desc2"});
             }
 
-            System.out.println("CURRENT SHOE");
-            System.out.println(shoe);
-
             rs.close();
             st.close();
             con.close();
@@ -177,7 +175,6 @@ public class Checkout extends HttpServlet {
 					cart = (ArrayList<Item>) session.getAttribute("cart");
 				}
 				double totalPrice = 0;
-				double tax = 0;
 
 				for (int i = 0;i<cart.size();i++) {
 					writer.println("<div class='cartitem'>");

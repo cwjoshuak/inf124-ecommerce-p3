@@ -86,9 +86,6 @@ public class ProductServlet extends HttpServlet {
                 fileName = rs.getString("file_name");
             }
 
-            System.out.println("CURRENT COLOR FILE NAME");
-            System.out.println(fileName.substring(fileName.length() -1));
-
             // 5. Close all connections
             rs.close();
             st.close();
@@ -113,10 +110,6 @@ public class ProductServlet extends HttpServlet {
             while (rs.next()) {
                 shoe = new Shoe(rs, new String[]{"type", "name", "id", "price", "desc1", "desc2"});
             }
-
-            System.out.println("CURRENT SHOE");
-            System.out.println(shoe);
-
             rs.close();
             st.close();
             con.close();
@@ -165,9 +158,6 @@ public class ProductServlet extends HttpServlet {
                 sizes.add(rs.getString("size"));
             }
 
-            System.out.println("SIZES");
-            System.out.print(sizes);
-
             // 5. Close all connections
             rs.close();
             st.close();
@@ -192,9 +182,6 @@ public class ProductServlet extends HttpServlet {
             while (rs.next()) {
                 colors.add(new ShoeColor(rs));
             }
-
-            System.out.println("COLORS");
-            System.out.print(colors);
 
             // 5. Close all connections
             rs.close();
@@ -308,7 +295,7 @@ public class ProductServlet extends HttpServlet {
 			writer.println(" <input type=\"hidden\" name=\"sid\" form='orderForm' value=\""+request.getParameter("id")+"\">");
 			writer.println(" <input type=\"hidden\" name=\"color\" form='orderForm' value=\""+request.getParameter("color")+"\">");
 
-			writer.println("</div>");
+            writer.println("</div>");
             writer.println("</div>");
             writer.println("</div>");
 
