@@ -16,7 +16,7 @@ import java.net.*;
 public class ProductServlet extends HttpServlet {
     private String url = "jdbc:mysql://localhost:3306/ecrocs?serverTimezone=UTC";
     private String dbUsername = "root";
-    private String dbPassword = "rxpost123";
+    private String dbPassword = "";
     public void init() {
         // 1. Load JDBC driver
         try {
