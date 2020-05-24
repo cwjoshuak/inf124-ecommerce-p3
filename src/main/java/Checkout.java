@@ -153,7 +153,7 @@ public class Checkout extends HttpServlet {
         try (PrintWriter writer = response.getWriter()) {
             writer.println("<!DOCTYPE html><html lang='en'>");
             writer.println("<head>");
-            writer.println("<title>eCrocs | Products</title>");
+            writer.println("<title>eCrocs | Checkout</title>");
             writer.println("<meta name=\"description\" charset=\"UTF-8\" content=\"A site for INF 124 ecommerce project - selling eCrocs\" />");
             writer.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />");
             writer.println("<link href=\"http://db.onlinewebfonts.com/c/158a997f8a01e5bd6f96844ae5739add?family=AG+Book+Rounded\" rel=\"stylesheet\" type=\"text/css\"/>");

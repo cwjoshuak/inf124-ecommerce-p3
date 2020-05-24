@@ -37,11 +37,19 @@ public class ProductServlet extends HttpServlet {
 			String size = request.getParameter("size");
 			String id = request.getParameter("sid");
 			String color = request.getParameter("color");
-			Item i = new Item(getShoe(id), request.getParameter("color"), getShoeColor(id,color), Integer.parseInt(size), Integer.parseInt(qty));
-
-			cart.add(i);
-			session.setAttribute("cart", cart);
-
+			boolean shouldAdd = true;
+			for(int i = 0; i < cart.size(); i++) {
+				Item it = cart.get(i);
+				if (it.shoe.id.equals(id) && Integer.parseInt(size) == it.size && it.color.equals(color)){
+					it.quantity += Integer.parseInt(qty);
+					shouldAdd = false;
+				}
+			}
+			if(shouldAdd) {
+				Item i = new Item(getShoe(id), request.getParameter("color"), getShoeColor(id,color), Integer.parseInt(size), Integer.parseInt(qty));
+				cart.add(i);
+				session.setAttribute("cart", cart);
+			}
 		}
 
 		response.sendRedirect("./checkout");
