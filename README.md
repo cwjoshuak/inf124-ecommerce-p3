@@ -31,14 +31,13 @@ Our site consists of 5 main pages:-
 
 ### Screenshots
 
-![](assets/home.png)
-![](assets/product-list.png)
-![](assets/single-product.png)
-![](assets/cart.png)
-![](assets/order-confirmation.png)
+![](src/main/webapp/assets/home.png)
+![](src/main/webapp/assets/product-list.png)
+![](src/main/webapp/assets/single-product.png)
+![](src/main/webapp/assets/checkout.png)
+![](src/main/webapp/assets/order-confirmation.png)
 
 #### Notes:
 
 - Files from project 2 have been reorganized.
 - Necessary sql files are in the `sql/` folder.
-- 
