@@ -42,7 +42,7 @@ public class OrderConfirmation extends HttpServlet {
 		return null;
 	}
 	protected ArrayList<TransactionDetails> getTransactionDetails(String id){
-		String query = "SELECT DISTINCT `transaction_id`, transaction_details.shoe_id, transaction_details.color_name, `quantity`, `shoe_size`, `base_price`, `state_tax`, `name`, `file_name` FROM `transaction_details` JOIN `shoes` ON transaction_details.shoe_id=shoes.id JOIN `shoe_colors` ON transaction_details.color_name=shoe_colors.color_name WHERE transaction_details.transaction_id="+id ;
+		String query = "SELECT DISTINCT `transaction_id`, transaction_details.shoe_id, transaction_details.color_name, `quantity`, `shoe_size`, `base_price`, `state_tax`, `name`, `file_name` FROM `transaction_details` JOIN `shoes` ON transaction_details.shoe_id=shoes.id JOIN `shoe_colors` ON transaction_details.color_name=shoe_colors.color_name AND shoe_colors.shoe_id=transaction_details.shoe_id WHERE transaction_details.transaction_id="+id ;
 
 		try {
 			Connection con = DriverManager.getConnection(url, dbUsername, dbPassword);
@@ -95,6 +95,7 @@ public class OrderConfirmation extends HttpServlet {
 			writer.println("<h2>Order Number: #"+transactionId+"</h2>");
 			for (int i = 0; i < details.size(); i++) {
 				TransactionDetails dt = details.get(i);
+				System.out.println(dt.shoeName);
 				writer.println("<div><h3>"+dt.shoeName+"</h3>");
 				writer.println("<img src='./assets/"+dt.shoeId+"/"+dt.imageFile+".jpg'>");
 				writer.println("<br/><h5>");

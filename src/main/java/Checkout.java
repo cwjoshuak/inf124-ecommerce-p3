@@ -103,7 +103,8 @@ public class Checkout extends HttpServlet {
 		}
 	}
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		response.setContentType("text/html");
+		response.setCharacterEncoding("UTF-8");
     	HttpSession session = request.getSession(false);
 
     	int id = insertTransaction(request);
