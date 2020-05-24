@@ -1,3 +1,4 @@
+use ecrocs;
 DROP TABLE IF EXISTS shoes;
 DROP TABLE IF EXISTS shoe_colors;
 DROP TABLE IF EXISTS shoe_sizes;
@@ -35,10 +36,6 @@ CREATE TABLE shoe_details(
 
 CREATE TABLE transactions (
 	id INT auto_increment,
-	shoe_id VARCHAR(10) references shoes.id,
-    color_name VARCHAR(50) references shoe_colors.color_name,
-    quantity INT,
-    shoe_size INT,
 
     billing_full_name VARCHAR(128),
 	billing_phone_number VARCHAR(12),
