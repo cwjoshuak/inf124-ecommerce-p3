@@ -2,9 +2,7 @@ let orderForm = document.getElementById("odForm");
 let oih3 = document.createElement("h3");
 oih3.textContent = "Order Information";
 
-document.title =
-    "eCrocs | Checkout" +
-    document.getElementsByClassName("confirmation-right")[0].children[0].textContent;
+document.title = "eCrocs | Checkout";
 orderForm.appendChild(oih3);
 let form = document.createElement("form");
 form.action = "./checkout";
