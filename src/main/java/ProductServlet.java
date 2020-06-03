@@ -201,6 +201,8 @@ public class ProductServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		if (session != null) {
+            System.out.println(session);
+            System.out.println(session.getAttributeNames());
 			ArrayList<String[]> viewed = (ArrayList<String[]>)session.getAttribute(("viewed"));
 			String id = request.getParameter("id");
 			String color = request.getParameter("color");

@@ -1,4 +1,5 @@
 let recentTable = document.getElementById("recent");
+
 console.log(recentTable);
 if (recentTable !== null) {
 
@@ -6,8 +7,11 @@ if (recentTable !== null) {
 	tableParent.insertBefore(recentTable, tableParent.firstChild.nextSibling.nextSibling);
 
 }
+console.log("KARTU");
 
 let cards = document.getElementsByClassName("card");
+console.log(cards);
+
 for (let i = 0; i < cards.length; i++) {
   cards[i].addEventListener("mouseenter", (event) => {
     event.currentTarget.style.boxShadow = "2px 2px 10px 3px rgba(0, 0, 0, 0.3)";
@@ -19,14 +23,20 @@ for (let i = 0; i < cards.length; i++) {
 }
 
 let colors = document.getElementsByClassName("colors");
+console.log(colors);
 for (let i = 0; i < colors.length; i++) {
   let anchor = colors[i].parentElement.parentElement;
 
   let id = anchor.id.split("-")[1];
   let colorCircles = colors[i].childNodes;
-  for (let j = 0; j < colorCircles.length; j++) {
+  console.log("childnodes");
+  console.log(colors[i].childNodes);
+
+    for (let j = 0; j < colorCircles.length; j++) {
     if (j == 0) {
+      console.log(colorCircles);
       let name = colorCircles[j].attributes["name"].value;
+      console.log(name);
       anchor.setAttribute("href", "./product?id=" + id + "&color=" + name);
     }
 
